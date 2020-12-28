@@ -1,3 +1,5 @@
+from Crypto.Util.number import long_to_bytes, bytes_to_long 
+
 
 def genParams():
     """
@@ -56,16 +58,19 @@ def encrypt(m, A, p, g):
     @type g: ZZ
     @param g: a generator of Zp
 
-    @rtype: TODO
+    @rtype: (ZZ, ZZ)
     @returns: the ciphertext
     """
-    return #TODO
+    b, B = keyGen(p, g)
+    M = bytes_to_long(m)
+
+    return ((g^b)%p, (M*(A)^b)%p)
     
 def decrypt(c, a, p, g):
     """
     Decrypts the ciphertext c under the private key a
 
-    @type c: TODO
+    @type c: (ZZ, ZZ)
     @param c: The ciphertext to decrypt
     @type a: ZZ
     @param a: the private key under which we decrypt
@@ -76,13 +81,19 @@ def decrypt(c, a, p, g):
     @rtype: bytes
     @returns: the plaintext
     """
-    return #TODO
+    # depact the cypher text
+    u, v = c
+    return long_to_bytes((v/(u)^a)%p)
 
 
 def main():
     p, g = genParams()
 
-    print(keyGen(p, g))
+    a, A = keyGen(p, g)
+
+    c = encrypt(b'Complexe message', A, p, g)
+
+    m = decrypt(c, a, p, g)
 
 if __name__ == '__main__':
     main()
