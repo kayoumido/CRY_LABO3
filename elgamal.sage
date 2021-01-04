@@ -117,5 +117,7 @@ def main():
     M = decrypt(c1, a1, p1, g1)
     print(M)
 
+
+
 if __name__ == '__main__':
     main()
