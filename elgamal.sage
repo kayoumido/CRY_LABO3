@@ -9,19 +9,23 @@ def genParams():
     @returns: a tuple consisting of the prime number p and a generator g of Zp
     """
     # generate the prime number p and Zp
-    # TODO Make sure p is greater than 2**3072
-    #       Possible solution: https://stackoverflow.com/questions/34140589/how-to-get-a-prime-of-a-given-length-in-sage
-    p = random_prime(2**3072, proof=False)
+    p = random_prime(2**3072, proof=False, lbound= 2**3071)
     Zp = Integers(p)
 
     # get a generator of Zp
     # Note: Atm it will always return 1!
-    # g = Zp.gen()
-    g = Zp.random_element()
+    g = Zp.gen()
 
     return (p, g)
     
-    
+
+def random_zp_element(p):
+
+    Zp = Integers(p)
+
+    # generate private key
+    return Zp.random_element()
+
 def keyGen(p, g):
     """
     Generates a private/public key pair. 
@@ -35,10 +39,8 @@ def keyGen(p, g):
     @returns: a tuple consisting of the private key a and the public key A
     """
 
-    Zp = Integers(p)
-
     # generate private key
-    a = Zp.random_element()
+    a = random_zp_element(p)
  
     # generate public key
     A = (a * g) % p
